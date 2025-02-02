@@ -1,0 +1,21 @@
+services:
+  discord-bot-container:
+    build: 
+      context: .
+      dockerfile: python.Dockerfile
+    volumes:
+      - ./bot-container:/app
+    environment:
+      - DISCORD_BOT_TOKEN=your_token_here
+      - DISCORD_BOT_PREFIX=!
+    command: ["tail", "-F", "/dev/null"]  
+  node-container:
+    image: node:20-alpine
+    build: 
+      context: .
+      dockerfile: node.Dockerfile  
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./discord-example-app/:/app/
+    command: ["tail", "-F", "/dev/null"]
