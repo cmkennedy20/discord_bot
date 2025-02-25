@@ -12,9 +12,27 @@ async function updateCommands() {
     try {
         getClans().then(members => {
             var memberTypes = [{ name: 'member', value: 'member' }, { name: 'admin', value: 'elder' }, { name: 'leader', value: 'leader' }]
+            let commands = [{
+                name: 'sync-members',
+                description: 'Sync the members list with the current clan roster.',
+            },
+            {
+                name: 'clan-info',
+                description: 'Get information about the clan.',
+            },
+            {
+                name: 'active-war',
+                description: 'List the remaining attacks in active war'
+            },
+            {
+                name: 'active-cwl',
+                description: 'List the remaining attacks in active cwl'
+            }
+            ];
             memberTypes.forEach((type) => {
                 let memberNames = memberNameExtractor(members.filter(info => info.role.toLowerCase().includes(type.name)))
-                let choiceList = []
+                let choiceList = [];
+                choiceList.push
                 memberNames.forEach((name) => {
                     choiceList.push({
                         name: name,
@@ -22,7 +40,7 @@ async function updateCommands() {
                     })
                 }
                 )
-                let commands = [
+                commands.push(
                     {
                         name: `${type.value}-stats`,
                         description: `Display the ${type.value} stats of a user`,
@@ -35,19 +53,19 @@ async function updateCommands() {
                                 choices: choiceList
                             }
                         ],
-                    },
-                ]
+                    })
+
                 console.log(`${type.value}-stats: ` + commands)
-                let output = rest.put(
-                    Routes.applicationGuildCommands(
-                        process.env.CLIENT_ID,
-                        process.env.GUILD_ID
-                    ),
-                    { body: commands }
-                ).then(() => {
-                    console.log(`Successfully updated the slash command for ${type.value}-stats`);
-                }).catch(console.error);
             })
+            rest.put(
+                Routes.applicationGuildCommands(
+                    process.env.CLIENT_ID,
+                    process.env.GUILD_ID
+                ),
+                { body: commands }
+            ).then(() => {
+                console.log(`Successfully updated the slash commands!`);
+            }).catch(console.error)
         })
     }
     catch (error) {
