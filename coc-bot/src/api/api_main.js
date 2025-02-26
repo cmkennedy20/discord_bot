@@ -33,5 +33,8 @@ const getWar = async () => {
     });
 }
 
+const getDiscord = async () => {
+    return axios.get('http://localhost:5000')
+}
 // You can import or declare variables here, but we'll export the functions directly
 export { getMember, getClans, getWar };
