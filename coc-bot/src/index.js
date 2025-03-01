@@ -52,7 +52,9 @@ client.on("interactionCreate", async (interaction) => {
             })
             break;
         case "active-war":
-
+	    pendingAttacks(pendingRaids => {
+	        
+	    })
             break;
         case "clan-info":
             clanHtmlDocument().then(html => {

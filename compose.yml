@@ -1,21 +1,18 @@
 services:
-  discord-bot-container:
-    build: 
-      context: .
-      dockerfile: python.Dockerfile
-    volumes:
-      - ./bot-container:/app
-    environment:
-      - DISCORD_BOT_TOKEN=your_token_here
-      - DISCORD_BOT_PREFIX=!
-    command: ["tail", "-F", "/dev/null"]  
   node-container:
     image: node:20-alpine
-    build: 
+    build:
       context: .
-      dockerfile: node.Dockerfile  
+      dockerfile: node.Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ./discord-example-app/:/app/
+      - ./coc-bot/:/app/
     command: ["tail", "-F", "/dev/null"]
+    networks:
+      - discord_server
+
+networks:
+  discord_server:
+    name: discord_server
+    external: true

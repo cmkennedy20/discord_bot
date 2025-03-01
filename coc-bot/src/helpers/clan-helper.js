@@ -1,4 +1,4 @@
-import { getClans, getMember, getWar } from "../api/api_main.js";
+import { getClans, getMember,getDiscord, getWar } from "../api/api_main.js";
 
 
 function clashspotUrl(memberId) {
@@ -15,11 +15,20 @@ const retrieveMember = async (memberName) => {
 
 const pendingAttacks = async () => {
     return getWar().then(warStats => {
-        return warStats.clan.members.filter(member => member.opponentAttacks != 2).map(pendingRaids => { return { name: pendingRaids.name, discordStatus: false } })
+        const value= warStats.clan.members.filter(member => member.opponentAttacks != 2).map(pendingRaids => { return { name: pendingRaids.name, discordStatus: false } })
+    	console.log(value)
+	return value
     })
 }
 
-pendingAttacks()
+const memberExtract = async () => {
+	const values= getDiscord();
+	console.log(values)
+	return values
+}
 
-export { clashspotUrl, retrieveMember }
+const createNotification = async () => {
+     
+}
 
+export { clashspotUrl, memberExtract, pendingAttacks, retrieveMember }

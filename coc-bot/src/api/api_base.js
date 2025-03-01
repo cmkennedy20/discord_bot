@@ -10,3 +10,7 @@ export function API_BASE(url) {
         },
     })
 }
+
+export function API_BASE_NO_AUTH(url) {
+    return axios.get(url)
+}

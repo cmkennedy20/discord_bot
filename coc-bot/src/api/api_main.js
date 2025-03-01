@@ -1,4 +1,4 @@
-import { API_BASE } from './api_base.js';
+import { API_BASE, API_BASE_NO_AUTH } from './api_base.js';
 
 const getMember = async (Id) => {
     const playerId = encodeURIComponent(Id);
@@ -34,7 +34,8 @@ const getWar = async () => {
 }
 
 const getDiscord = async () => {
-    return axios.get('http://localhost:5000')
+    const value= API_BASE_NO_AUTH('http://python_api:5000')
+    return value
 }
 // You can import or declare variables here, but we'll export the functions directly
-export { getMember, getClans, getWar };
+export { getMember, getClans, getDiscord, getWar };
