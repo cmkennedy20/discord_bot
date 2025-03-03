@@ -8,9 +8,11 @@ services:
       - "3001:3001"
     volumes:
       - ./coc-bot/:/app/
-    command: ["tail", "-F", "/dev/null"]
+    # command: ["tail", "-F", "/dev/null"]
+    command: ["node", "--env-file=.env", "src/index.js"]
     networks:
       - discord_server
+    restart: unless-stopped
 
 networks:
   discord_server:

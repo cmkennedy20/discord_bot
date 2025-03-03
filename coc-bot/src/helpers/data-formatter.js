@@ -21,10 +21,5 @@ function memberNameExtractor(data) {
     return memberNameList;
 }
 
-function discordLookup(memberList) {
-    for (let member in memberList) {
-	console.log(member)
-    }
-}
 
-export { discordLookup, memberNameExtractor, roleFormatter }
+export { memberNameExtractor, roleFormatter }

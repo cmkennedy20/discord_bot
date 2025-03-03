@@ -42,7 +42,6 @@ async function formatMemberEmbed() {
 async function grabFormattedEmbed() {
     // var result = JSON.stringify(await formatMemberEmbed())
     var result = await formatMemberEmbed()
-    console.log(typeof (result))
     var exampleEmbed = new EmbedBuilder()
         .setColor(0x0099FF)
         .setTitle('Clan Members')
