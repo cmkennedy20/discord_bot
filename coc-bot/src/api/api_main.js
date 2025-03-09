@@ -1,4 +1,4 @@
-import { API_BASE, API_BASE_NO_AUTH } from './api_base.js';
+import { API_BASE, API_BASE_NO_AUTH, API_LLAMA_BASE_NO_AUTH } from './api_base.js';
 
 const getMember = async (Id) => {
     const playerId = encodeURIComponent(Id);
@@ -34,8 +34,18 @@ const getWar = async () => {
 }
 
 const getDiscord = async () => {
-    const value= API_BASE_NO_AUTH('http://python_api:5000')
+    const value = API_BASE_NO_AUTH('http://python_api:5000')
     return value
 }
+
+
+const postLlama = async (message) => {
+    const url = `http://10.0.0.190:11434/api/chat`
+    return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
+        return res
+    }).catch((err) => {
+        console.error(err)
+    })
+}
 // You can import or declare variables here, but we'll export the functions directly
-export { getMember, getClans, getDiscord, getWar };
+export { getMember, getClans, getDiscord, getWar, postLlama };

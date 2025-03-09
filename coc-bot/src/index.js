@@ -4,7 +4,7 @@ import nodeHtmlToImage from 'node-html-to-image'
 import { clanHtmlDocument } from './helpers/html-constructor.js'
 import { updateCommands } from './register-commands.js'
 import { clashspotUrl, createClashNotification, createDiscordNotification, retrieveMember } from "./helpers/clan-helper.js";
-
+import { llamaQuery } from "./helpers/llama-helper.js";
 env.config();
 
 const token = process.env.DISCORD_TOKEN;
@@ -83,3 +83,15 @@ client.on("interactionCreate", async (interaction) => {
             console.log(interaction);
     }
 });
+
+client.on('messageCreate', (message) => {
+    // Ignore messages from the bot itself
+    if (message.author.bot) return;
+
+    // Check if the bot is mentioned
+    if (message.mentions.has(client.user)) {
+        llamaQuery(message.content.split(">")[1]).then((response) =>
+            message.reply(response)
+        );
+    }
+})
