@@ -17,7 +17,7 @@ export function API_BASE_NO_AUTH(url) {
 
 export function API_LLAMA_BASE_NO_AUTH(url, input) {
     let data = JSON.stringify({
-        "model": "llama3.1:8b",
+        "model": "llama3.2:1b",
         "stream": false,
         "messages": [
             {
