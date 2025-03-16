@@ -9,7 +9,7 @@ services:
     volumes:
       - ./coc-bot/:/app/
     # command: ["tail", "-F", "/dev/null"]
-    command: ["node", "--env-file=.env", "src/index.js"]
+    command: ["node", "--env-file=.env", "src/index.js"] 
     networks:
       - discord_server
     restart: unless-stopped

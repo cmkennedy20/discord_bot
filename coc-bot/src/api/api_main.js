@@ -34,7 +34,7 @@ const getWar = async () => {
 }
 
 const getDiscord = async () => {
-    const value = API_BASE_NO_AUTH('http://python_api:5000')
+    const value = API_BASE_NO_AUTH('http://10.0.0.190:5000/redis')
     return value
 }
 
