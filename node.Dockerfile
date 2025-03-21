@@ -1,6 +1,6 @@
 FROM node:20-alpine
 WORKDIR /app
-COPY * ./
+COPY . ./
 RUN apk add bash vim
 RUN npm install
 

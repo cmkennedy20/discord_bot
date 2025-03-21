@@ -1,4 +1,4 @@
-import { API_BASE, API_BASE_NO_AUTH, API_LLAMA_BASE_NO_AUTH } from './api_base.js';
+import { API_BASE, API_BASE_NO_AUTH, API_LLAMA_BASE_NO_AUTH, API_BASE_NO_AUTH_POST } from './api_base.js';
 
 const getMember = async (Id) => {
     const playerId = encodeURIComponent(Id);
@@ -44,8 +44,17 @@ const postLlama = async (message) => {
     return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
         return res
     }).catch((err) => {
-        console.error(err)
+        console.error("Error in postLlama: " + err)
+    })
+}
+
+const postImage = async (message) => {
+    const url = `http://10.0.0.190:5000/generate`
+    return API_BASE_NO_AUTH_POST(url, message).then((res) => {
+        return res
+    }).catch((err) => {
+        console.error("Error in postImage: " + err)
     })
 }
 // You can import or declare variables here, but we'll export the functions directly
-export { getMember, getClans, getDiscord, getWar, postLlama };
+export { getMember, getClans, getDiscord, getWar, postImage, postLlama };

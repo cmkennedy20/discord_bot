@@ -15,6 +15,35 @@ export function API_BASE_NO_AUTH(url) {
     return axios.get(url)
 }
 
+export function API_BASE_NO_AUTH_POST(url, message) {
+    let data = JSON.stringify({
+        "prompt": message
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: url,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data,
+    };
+    return axios.request(config)
+        .then(response => {
+            // Extract the Base64 string
+            let base64Image = response.data.image_base64;
+            // Handle MIME type prefix (if present)
+            if (base64Image.startsWith('data:image')) {
+                base64Image = base64Image.split(',')[1];  // Remove MIME prefix
+            }
+            // Decode Base64 to binary
+            const imageBuffer = Buffer.from(base64Image, 'base64');
+            // Return the binary image buffer as a Blob object
+            return imageBuffer
+        })
+}
+
 export function API_LLAMA_BASE_NO_AUTH(url, input) {
     let data = JSON.stringify({
         "model": "llama3.2:1b",
