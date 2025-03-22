@@ -46,14 +46,7 @@ export function API_BASE_NO_AUTH_POST(url, message) {
 
 export function API_LLAMA_BASE_NO_AUTH(url, input) {
     let data = JSON.stringify({
-        "model": "llama3.2:1b",
-        "stream": false,
-        "messages": [
-            {
-                "role": "user",
-                "content": input + "Keep the response under 1999 characters."
-            }
-        ]
+        "prompt": input
     });
     let config = {
         method: 'post',
@@ -66,7 +59,8 @@ export function API_LLAMA_BASE_NO_AUTH(url, input) {
     };
     return axios.request(config)
         .then((response) => {
-            return response.data.message.content;
+            console.log(response)
+            return response.data;
         })
         .catch((error) => {
             console.log(error);

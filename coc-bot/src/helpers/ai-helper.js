@@ -1,4 +1,4 @@
-import { postLlama, postImage } from "../api/api_main.js";
+import { postLlama, postImage, contentCheck } from "../api/api_main.js";
 
 const llamaQuery = async (content) => {
     return postLlama(content).then((res) => {
@@ -18,7 +18,7 @@ const llamaQuery = async (content) => {
 }
 
 const imageGeneration = async (content) => {
-    const summarizedMessage = await llamaQuery(content + ". Summarize this prompt and limit it to 75 tokens. This will be a prompt to generate an image so it should be formatted in a way which increases the quality of the generated content.");
+    const summarizedMessage = await llamaQuery(content);
     console.log("Summarized message :" + summarizedMessage)
     return postImage(summarizedMessage).then((res) => {
         return res
@@ -26,4 +26,9 @@ const imageGeneration = async (content) => {
         .catch((err) => console.error(err))
 }
 
-export { imageGeneration, llamaQuery }
+const contentChecker = async (content) => {
+    const requireImage = await contentCheck(content);
+    return requireImage;
+}
+
+export { contentChecker, imageGeneration, llamaQuery }

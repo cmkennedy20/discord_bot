@@ -4,7 +4,7 @@ import nodeHtmlToImage from 'node-html-to-image'
 import { clanHtmlDocument } from './helpers/html-constructor.js'
 import { updateCommands } from './register-commands.js'
 import { clashspotUrl, createClashNotification, createDiscordNotification, retrieveMember } from "./helpers/clan-helper.js";
-import { llamaQuery, imageGeneration } from "./helpers/ai-helper.js";
+import { contentChecker, llamaQuery, imageGeneration } from "./helpers/ai-helper.js";
 env.config();
 
 const token = process.env.DISCORD_TOKEN;
@@ -91,28 +91,29 @@ client.on('messageCreate', (message) => {
     // Check if the bot is mentioned
     if (message.mentions.has(client.user)) {
         const inputMessage = message.content.split(">")[1]
-        if (inputMessage.toLowerCase().includes("create image")) {
-            const attachment = new AttachmentBuilder('./assets/misc/loading_1.gif');
-            message.reply({
-                content: "Generating Image...",
-                files: [attachment]
-            })
-                .then(msg => {
-                    imageGeneration(inputMessage).then(result => {
-                        // Create an attachment
-                        const attachment = new AttachmentBuilder(result, { name: 'image.png' });
-                        msg.edit({
-                            content: "Generated Image",
-                            files: [attachment]
+        contentChecker(inputMessage).then(response => {
+            if (response === true) {
+                const attachment = new AttachmentBuilder('./assets/misc/loading_1.gif');
+                message.reply({
+                    content: "Generating Image...",
+                    files: [attachment]
+                })
+                    .then(msg => {
+                        imageGeneration(inputMessage).then(result => {
+                            // Create an attachment
+                            const attachment = new AttachmentBuilder(result, { name: 'image.png' });
+                            msg.edit({
+                                content: "Generated Image",
+                                files: [attachment]
+                            })
                         })
-                    })
 
-                });
-        } else {
-            llamaQuery(message.content.split(">")[1]).then((response) =>
-                message.reply(response)
-            );
-        }
-
+                    });
+            } else {
+                llamaQuery(message.content.split(">")[1]).then((response) =>
+                    message.reply(response)
+                );
+            }
+        }).catch(err => console.log(err));
     }
 })

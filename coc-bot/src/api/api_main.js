@@ -4,7 +4,7 @@ const getMember = async (Id) => {
     const playerId = encodeURIComponent(Id);
     const url = `https://api.clashofclans.com/v1/players/${playerId}`;
     return API_BASE(url).then((res) => {
-        console.log(res.data)
+
         return res.data;
     }).catch((err) => {
         console.log("Error in getMember :" + err);
@@ -40,13 +40,23 @@ const getDiscord = async () => {
 
 
 const postLlama = async (message) => {
-    const url = `http://10.0.0.190:11434/api/chat`
+    const url = `http://10.0.0.190:5000/llama/discord_image/`
     return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
         return res
     }).catch((err) => {
         console.error("Error in postLlama: " + err)
     })
 }
+
+const contentCheck = async (message) => {
+    const url = `http://10.0.0.190:5000/llama/content_check/`
+    return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
+        return res.result
+    }).catch((err) => {
+        console.error("Error in postLlama: " + err)
+    })
+}
+
 
 const postImage = async (message) => {
     const url = `http://10.0.0.190:5000/generate`
@@ -57,4 +67,4 @@ const postImage = async (message) => {
     })
 }
 // You can import or declare variables here, but we'll export the functions directly
-export { getMember, getClans, getDiscord, getWar, postImage, postLlama };
+export { contentCheck, getMember, getClans, getDiscord, getWar, postImage, postLlama };
