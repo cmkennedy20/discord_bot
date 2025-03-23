@@ -59,7 +59,6 @@ export function API_LLAMA_BASE_NO_AUTH(url, input) {
     };
     return axios.request(config)
         .then((response) => {
-            console.log(response)
             return response.data;
         })
         .catch((error) => {

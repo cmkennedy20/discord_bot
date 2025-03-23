@@ -2,7 +2,7 @@ import env from "dotenv";
 import { Client, GatewayIntentBits, AttachmentBuilder } from "discord.js";
 import { updateCommands } from './register-commands.js'
 import { createClashNotification, createDiscordNotification } from "./helpers/clan-helper.js";
-import { promptCreation, imageGeneration } from "./helpers/ai-helper.js";
+import { promptCreation, imageGeneration, responseLimiter } from "./helpers/ai-helper.js";
 env.config();
 
 const token = process.env.DISCORD_TOKEN;
@@ -90,6 +90,7 @@ client.on('messageCreate', (message) => {
     if (message.mentions.has(client.user)) {
         const inputMessage = message.content.split(">")[1]
         promptCreation(inputMessage).then(response => {
+            const strippedPrompt = responseLimiter(response.prompt)
             switch (response.type) {
                 case "image":
                     const attachment = new AttachmentBuilder('./assets/misc/loading_1.gif');
@@ -98,7 +99,7 @@ client.on('messageCreate', (message) => {
                         files: [attachment]
                     })
                         .then(msg => {
-                            imageGeneration(inputMessage).then(result => {
+                            imageGeneration(strippedPrompt).then(result => {
                                 // Create an attachment
                                 const attachment = new AttachmentBuilder(result, { name: 'image.png' });
                                 msg.edit({
@@ -109,7 +110,7 @@ client.on('messageCreate', (message) => {
                         });
                     break;
                 default:
-                    message.reply(response.prompt)
+                    message.reply(strippedPrompt)
                     break;
             }
         }).catch(err => console.log(err));

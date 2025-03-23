@@ -1,26 +1,22 @@
-import { postLlama, generatePrompt, postImage } from "../api/api_main.js";
+import { generatePrompt, postImage } from "../api/api_main.js";
 
-const llamaQuery = async (content) => {
-    return postLlama(content).then((res) => {
-        let result = ""
-        if (typeof res !== 'string') {
-            console.error('Invalid response type');
-            return;
-        }
-        if (res.length <= 2000) {
-            result = res;
-        } else {
-            const truncatedRes = res.substring(0, 1895);
-            result = truncatedRes + '\n**Truncated due to character limit. Original message was too long.**'
-        }
-        return result
-    }).catch((err) => console.error(err))
+const responseLimiter = (content) => {
+    let result = ""
+    if (typeof content !== 'string') {
+        console.error('Invalid response type');
+        return;
+    }
+    if (content.length <= 2000) {
+        result = content;
+    } else {
+        const truncatedRes = content.substring(0, 1895);
+        result = truncatedRes + '\n**Truncated due to character limit. Original message was too long.**'
+    }
+    return result
 }
 
 const imageGeneration = async (content) => {
-    const summarizedMessage = await llamaQuery(content);
-    console.log("Summarized message :" + summarizedMessage)
-    return postImage(summarizedMessage).then((res) => {
+    return postImage(content).then((res) => {
         return res
     })
         .catch((err) => console.error(err))
@@ -31,4 +27,4 @@ const promptCreation = async (content) => {
     return result
 }
 
-export { promptCreation, imageGeneration, llamaQuery }
+export { promptCreation, imageGeneration, responseLimiter }
