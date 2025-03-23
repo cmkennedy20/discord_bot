@@ -38,7 +38,6 @@ const getDiscord = async () => {
     return value
 }
 
-
 const postLlama = async (message) => {
     const url = `http://10.0.0.190:5000/llama/discord_image/`
     return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
@@ -48,23 +47,22 @@ const postLlama = async (message) => {
     })
 }
 
-const contentCheck = async (message) => {
-    const url = `http://10.0.0.190:5000/llama/content_check/`
-    return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
-        return res.result
-    }).catch((err) => {
-        console.error("Error in postLlama: " + err)
-    })
-}
-
-
 const postImage = async (message) => {
-    const url = `http://10.0.0.190:5000/generate`
+    const url = `http://10.0.0.190:5000/generate/image/`
     return API_BASE_NO_AUTH_POST(url, message).then((res) => {
         return res
     }).catch((err) => {
         console.error("Error in postImage: " + err)
     })
 }
+
+const generatePrompt = async (message) => {
+    const url = `http://10.0.0.190:5000/llama/prompt_generation/`
+    return API_LLAMA_BASE_NO_AUTH(url, message).then((res) => {
+        return res
+    }).catch((err) => {
+        console.error("Error in postImage: " + err)
+    })
+}
 // You can import or declare variables here, but we'll export the functions directly
-export { contentCheck, getMember, getClans, getDiscord, getWar, postImage, postLlama };
+export { generatePrompt, getMember, getClans, getDiscord, getWar, postImage, postLlama };

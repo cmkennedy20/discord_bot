@@ -1,4 +1,4 @@
-import { postLlama, postImage, contentCheck } from "../api/api_main.js";
+import { postLlama, generatePrompt, postImage } from "../api/api_main.js";
 
 const llamaQuery = async (content) => {
     return postLlama(content).then((res) => {
@@ -26,9 +26,9 @@ const imageGeneration = async (content) => {
         .catch((err) => console.error(err))
 }
 
-const contentChecker = async (content) => {
-    const requireImage = await contentCheck(content);
-    return requireImage;
+const promptCreation = async (content) => {
+    const result = generatePrompt(content);
+    return result
 }
 
-export { contentChecker, imageGeneration, llamaQuery }
+export { promptCreation, imageGeneration, llamaQuery }

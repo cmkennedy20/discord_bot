@@ -1,10 +1,8 @@
 import env from "dotenv";
-import { Client, GatewayIntentBits, ActivityType, AttachmentBuilder, CommandInteractionOptionResolver } from "discord.js";
-import nodeHtmlToImage from 'node-html-to-image'
-import { clanHtmlDocument } from './helpers/html-constructor.js'
+import { Client, GatewayIntentBits, AttachmentBuilder } from "discord.js";
 import { updateCommands } from './register-commands.js'
-import { clashspotUrl, createClashNotification, createDiscordNotification, retrieveMember } from "./helpers/clan-helper.js";
-import { contentChecker, llamaQuery, imageGeneration } from "./helpers/ai-helper.js";
+import { createClashNotification, createDiscordNotification } from "./helpers/clan-helper.js";
+import { promptCreation, imageGeneration } from "./helpers/ai-helper.js";
 env.config();
 
 const token = process.env.DISCORD_TOKEN;
@@ -91,28 +89,28 @@ client.on('messageCreate', (message) => {
     // Check if the bot is mentioned
     if (message.mentions.has(client.user)) {
         const inputMessage = message.content.split(">")[1]
-        contentChecker(inputMessage).then(response => {
-            if (response === true) {
-                const attachment = new AttachmentBuilder('./assets/misc/loading_1.gif');
-                message.reply({
-                    content: "Generating Image...",
-                    files: [attachment]
-                })
-                    .then(msg => {
-                        imageGeneration(inputMessage).then(result => {
-                            // Create an attachment
-                            const attachment = new AttachmentBuilder(result, { name: 'image.png' });
-                            msg.edit({
-                                content: "Generated Image",
-                                files: [attachment]
+        promptCreation(inputMessage).then(response => {
+            switch (response.type) {
+                case "image":
+                    const attachment = new AttachmentBuilder('./assets/misc/loading_1.gif');
+                    message.reply({
+                        content: "Generating Image...",
+                        files: [attachment]
+                    })
+                        .then(msg => {
+                            imageGeneration(inputMessage).then(result => {
+                                // Create an attachment
+                                const attachment = new AttachmentBuilder(result, { name: 'image.png' });
+                                msg.edit({
+                                    content: "Generated Image",
+                                    files: [attachment]
+                                })
                             })
-                        })
-
-                    });
-            } else {
-                llamaQuery(message.content.split(">")[1]).then((response) =>
-                    message.reply(response)
-                );
+                        });
+                    break;
+                default:
+                    message.reply(response.prompt)
+                    break;
             }
         }).catch(err => console.log(err));
     }
